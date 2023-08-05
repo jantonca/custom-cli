@@ -1,0 +1,40 @@
+---------------------------------
+Rename files replacing a string
+---------------------------------
+ls | Rename-Item -NewName {$_.name -replace "\(20", "(Cinebook 20"}
+ls | Rename-Item -NewName {$_.name -replace " - E", " #"}
+ls | Rename-Item -NewName {$_.name -replace " \(1080p BluRay x265 Ghost\)", ""}
+ls | Rename-Item -NewName {$_.name -replace "RCO", "ACO"}
+ls | Rename-Item -NewName {$_.name -replace " - ", ""}
+
+------------------------------------------------------------
+PowerShell: Append a prefix to all files in a directory
+--------------------------------------------------------
+$items=Get-ChildItem -exclude *.sh;
+$items | Rename-Item -NewName { "Historias Seleccion - " + $_.Name };
+
+------------------------------------------------------------
+PowerShell: Append a sufix to all files in a directory
+--------------------------------------------------------
+$items=Get-ChildItem -exclude *.sh, *.txt, *.csv;
+$items | Rename-Item -NewName { $_.Name + "Secret War " };
+
+------------------------------------------------------------
+PowerShell: Rename all files in a directory from a list
+--------------------------------------------------------
+$items=Get-ChildItem -exclude *.sh, *.txt, *.csv;
+$newnames = Get-Content 'newnames.txt'
+for ($i = 0; $i -lt $items.Count; $i++) {
+  Rename-Item $items[$i] $newnames[$i]
+}
+
+------------------------------------------
+Rename all files in a folder to lowercase
+------------------------------------------
+dir . -r | % { if ($_.Name -cne $_.Name.ToLower()) { ren $_.FullName $_.Name.ToLower() } }
+
+-----------------------------------------------------------------------
+Capitalize the first letter of each word in a filename with powershell
+-----------------------------------------------------------------------
+$TextInfo = (Get-Culture).TextInfo
+get-childitem *.cbr, *.cbz | foreach { $NewName = $TextInfo.ToTitleCase($_); ren $_.FullName $NewName }
